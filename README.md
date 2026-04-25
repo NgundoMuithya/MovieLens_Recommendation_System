@@ -41,7 +41,7 @@ This file holds the visualisations that were conducted in the Exploratory Data A
 
 ### Notebooks
 
-- `notebook.ipynb` – Data Understanding, Exploratory Data Analysis, Model Building and Recommendation Functions.
+- [Notebook](./notebook.ipynb) 
 
 ---
 
@@ -56,11 +56,11 @@ Interactive visualizations were created using Tableau and published online.
 ### Presentation
 A non-technical presentation summarizing the analysis and business recommendations.
 
-- [Presentation]('./presentation.ipynb')
+- [Presentation]('./presentation.pdf')
 
 ---
 
 ## How to Use This Repository
-1. Review the notebook ([notebook](./notebook.ipynb)) to understand the analysis and methodology.
+1. Review the notebook to understand the analysis and methodology.
 2. Explore the interactive Tableau dashboards using the link above for hands-on visualization.
 3. View the presentation PDF for a high-level summary of insights and recommendations.
