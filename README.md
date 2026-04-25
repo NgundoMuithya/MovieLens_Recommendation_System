@@ -56,7 +56,7 @@ Interactive visualizations were created using Tableau and published online.
 ### Presentation
 A non-technical presentation summarizing the analysis and business recommendations.
 
-- [Presentation]('./presentation.pdf')
+- [Presentation](./presentation.pdf)
 
 ---
 
