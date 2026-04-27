@@ -252,22 +252,44 @@ elif page == "Get Recommendations":
 
         new_user_id = int(ratings_df["userId"].max()) + 1
 
-        # Initialise session state
+        # Genre dropdown
+        all_genres = sorted(
+            set(
+                genre
+                for genres in movies_df["genres"].str.split("|")
+                for genre in genres
+                if genre != "(no genres listed)"
+            )
+        )
+        selected_genre = st.selectbox(
+            "Sample movies from genre:",
+            options=all_genres,
+            index=all_genres.index("Action") if "Action" in all_genres else 0,
+        )
+        genre_movies_df = movies_df[
+            movies_df["genres"].str.contains(selected_genre, regex=False)
+        ]
+
+        # Initialise session state on first load
         if "slots" not in st.session_state:
-            initial = movies_df.sample(5).reset_index(drop=True)
+            initial = genre_movies_df.sample(min(5, len(genre_movies_df))).reset_index(
+                drop=True
+            )
             st.session_state.slots = [
                 {"movie": row, "rated": False, "rating": None, "editing": False}
                 for _, row in initial.iterrows()
             ]
             st.session_state.shown_movie_ids = set(initial["movieId"])
+            st.session_state.selected_genre = selected_genre
 
-        # Get New Samples — replace unrated and editing slots
-        if st.button("🔄 Get New Samples"):
+        # When genre changes, only resample unrated/editing slots
+        if st.session_state.get("selected_genre") != selected_genre:
+            st.session_state.selected_genre = selected_genre
             slots_to_replace = sum(
                 1 for s in st.session_state.slots if not s["rated"] or s["editing"]
             )
-            remaining = movies_df[
-                ~movies_df["movieId"].isin(st.session_state.shown_movie_ids)
+            remaining = genre_movies_df[
+                ~genre_movies_df["movieId"].isin(st.session_state.shown_movie_ids)
             ]
             if len(remaining) < slots_to_replace:
                 st.session_state.shown_movie_ids = set(
@@ -275,11 +297,44 @@ elif page == "Get Recommendations":
                     for s in st.session_state.slots
                     if s["rated"] and not s["editing"]
                 )
-                remaining = movies_df[
-                    ~movies_df["movieId"].isin(st.session_state.shown_movie_ids)
+                remaining = genre_movies_df[
+                    ~genre_movies_df["movieId"].isin(st.session_state.shown_movie_ids)
+                ]
+            new_movies = remaining.sample(
+                min(slots_to_replace, len(remaining))
+            ).reset_index(drop=True)
+            new_iter = iter(new_movies.iterrows())
+            for slot in st.session_state.slots:
+                if not slot["rated"] or slot["editing"]:
+                    _, new_row = next(new_iter)
+                    slot["movie"] = new_row
+                    slot["rated"] = False
+                    slot["rating"] = None
+                    slot["editing"] = False
+                    st.session_state.shown_movie_ids.add(new_row["movieId"])
+            st.rerun()
+
+        # Get New Samples — replace unrated and editing slots
+        if st.button("🔄 Get New Samples"):
+            slots_to_replace = sum(
+                1 for s in st.session_state.slots if not s["rated"] or s["editing"]
+            )
+            remaining = genre_movies_df[
+                ~genre_movies_df["movieId"].isin(st.session_state.shown_movie_ids)
+            ]
+            if len(remaining) < slots_to_replace:
+                st.session_state.shown_movie_ids = set(
+                    s["movie"]["movieId"]
+                    for s in st.session_state.slots
+                    if s["rated"] and not s["editing"]
+                )
+                remaining = genre_movies_df[
+                    ~genre_movies_df["movieId"].isin(st.session_state.shown_movie_ids)
                 ]
 
-            new_movies = remaining.sample(slots_to_replace).reset_index(drop=True)
+            new_movies = remaining.sample(
+                min(slots_to_replace, len(remaining))
+            ).reset_index(drop=True)
             new_iter = iter(new_movies.iterrows())
             for slot in st.session_state.slots:
                 if not slot["rated"] or slot["editing"]:
