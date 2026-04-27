@@ -165,7 +165,7 @@ if page == "Home":
 
     st.markdown(
         """
-    ### Welcome to IndieFlix Recommendation Engine
+    ### Welcome to MovieLens Recommendation Engine
 
     This Streamlit app is built from a collaborative filtering recommendation system.
 

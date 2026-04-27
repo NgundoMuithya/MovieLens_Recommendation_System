@@ -29,13 +29,30 @@ The `data/` directory contains the aviation accident dataset used for analysis.
 ---
 ### Images
 This file holds the visualisations that were conducted in the Exploratory Data Analysis (EDA) section of the notebook. The visualisations / images are :
-   - **Avg_Rating_Per_Genre.png**
+   - **Avg Rating Per Genre**:
 
-   - **Num_of_Ratings_Per_Genre.png**
+   <img src='./Images/Avg_Rating_Per_Genre.png'/>
 
-   - **Num_of_Ratings_Per_Genre_vs_Their_Avg_Rating.png**
+   *Insight: Genre ratings do not vary significantly. There are no content preferences*
 
-   - **Num_of_Ratings_Per_User_vs_Avg_Rating.png**
+   - **Num of Ratings Per Genre**
+
+   <img src='./Images/Num_of_Ratings_Per_Genre.png'/>
+
+   *Insight: Some genres are highly rated but not widely watched* 
+
+   - **Num of Ratings Per Genre vs Their Avg Rating**
+
+   <img src='./Images/Num_of_Ratings_Per_Genre_vs_Their_Avg_Rating.png'/>
+
+   *Insight: There is no strong correlation between genre popularity and average rating*
+
+   - **Num of Ratings Per User vs Avg Rating**
+
+   <img src='./Images/Num_of_Ratings_Per_User_vs_Avg_Rating.png'/>
+
+   *Insight: Most users are inactive. A small group of power users contribute to the majority of ratings*
+
 
 ---
 
