@@ -77,6 +77,38 @@ A non-technical presentation summarizing the analysis and business recommendatio
 
 ---
 
+### Streamlit UI
+A user Interface for users to interact with the recommendation system built using streamlit.
+
+Instructions to run:
+- Navigate to your project directory in your terminal.
+
+- Ensure you have Streamlit installed. You can check using the command:
+
+```bash
+streamlit --version
+```
+
+- If it is not installed, install it using either pip or conda:
+
+   * pip:
+   ```bash
+   pip install streamlit
+   ```
+
+   * conda (recommended if you have conda):
+   ```bash
+  conda install -c conda-forge streamlit
+   ```
+
+- Once installed, run the following command to open the UI in your web browser:
+
+```bash
+streamlit run app.py
+```
+
+---
+
 ## How to Use This Repository
 1. Review the notebook to understand the analysis and methodology.
 2. Explore the interactive Tableau dashboards using the link above for hands-on visualization.
