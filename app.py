@@ -202,7 +202,6 @@ elif page == "Get Recommendations":
         user_id = st.number_input(
             "Enter your User ID",
             min_value=1,
-            max_value=int(ratings_df["userId"].max()),
             value=1,
             step=1,
         )
@@ -212,34 +211,43 @@ elif page == "Get Recommendations":
             type="primary",
             use_container_width=True,
         ):
-            with st.spinner("Generating recommendations..."):
-                all_movie_ids = new_ratings_df["movieId"].unique()
-                user_movie_ids = set(
-                    new_ratings_df.loc[new_ratings_df["userId"] == user_id, "movieId"]
+            if user_id not in ratings_df["userId"].values:
+                st.error(
+                    f"User ID {user_id} was not found in the database. Please enter a valid User ID."
                 )
+            else:
+                with st.spinner("Generating recommendations..."):
+                    all_movie_ids = new_ratings_df["movieId"].unique()
+                    user_movie_ids = set(
+                        new_ratings_df.loc[
+                            new_ratings_df["userId"] == user_id, "movieId"
+                        ]
+                    )
 
-                predictions = [
-                    (movie_id, best_model.predict(user_id, movie_id).est)
-                    for movie_id in all_movie_ids
-                    if movie_id not in user_movie_ids
-                ]
-                predictions.sort(key=lambda x: x[1], reverse=True)
-                top_5 = predictions[:5]
+                    predictions = [
+                        (movie_id, best_model.predict(user_id, movie_id).est)
+                        for movie_id in all_movie_ids
+                        if movie_id not in user_movie_ids
+                    ]
+                    predictions.sort(key=lambda x: x[1], reverse=True)
+                    top_5 = predictions[:5]
 
-                movie_id_to_title = movies_df.set_index("movieId")["title"].to_dict()
-                recs = [
-                    {
-                        "Rank": i + 1,
-                        "Movie Title": movie_id_to_title[movie_id],
-                        "Predicted Rating": round(score, 3),
-                    }
-                    for i, (movie_id, score) in enumerate(top_5)
-                ]
+                    movie_id_to_title = movies_df.set_index("movieId")[
+                        "title"
+                    ].to_dict()
+                    recs = [
+                        {
+                            "Rank": i + 1,
+                            "Movie Title": movie_id_to_title[movie_id],
+                            "Predicted Rating": round(score, 3),
+                        }
+                        for i, (movie_id, score) in enumerate(top_5)
+                    ]
 
-                st.dataframe(
-                    pd.DataFrame(recs), use_container_width=True, hide_index=True
-                )
-                st.balloons()
+                    st.dataframe(
+                        pd.DataFrame(recs), use_container_width=True, hide_index=True
+                    )
+                    st.balloons()
 
     # ------------------- NEW USER -------------------
     with tab2:
