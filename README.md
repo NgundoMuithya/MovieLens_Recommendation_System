@@ -96,7 +96,7 @@ streamlit --version
    pip install streamlit
    ```
 
-   * conda (recommended if you have conda):
+   * conda (recommended if you have both pip and conda):
    ```bash
   conda install -c conda-forge streamlit
    ```
